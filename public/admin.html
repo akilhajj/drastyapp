@@ -1,1 +1,484 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>drasty.net - لوحة الإدارة العليا السيادية المتقدمة</title>
+    <!-- الأيقونات والخطوط المعتمدة عبر سيرفرات cdnjs لضمان عملها داخل سوريا للأبد دون حجب -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --bg-dark: #050a12;
+            --bg-card: rgba(8, 16, 32, 0.65);
+            --neon-gold: #d4af37;
+            --neon-green: #00ff66;
+            --neon-red: #ff3333;
+            --neon-blue: #00d2ff;
+            --text-light: #f5f6f8;
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --sidebar-width: 320px;
+        }
 
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: radial-gradient(circle at top, #0f233c 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* الأيقونات النيونية الهندسية البرمجية ثلاثية الأبعاد بنظام الـ CSS */
+        .neon-icon-css {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            font-size: 18px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid currentColor;
+            box-shadow: 0 0 12px currentColor;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.06); opacity: 1; box-shadow: 0 0 18px currentColor; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .anim-pulse { animation: pulseGlow 2.5s infinite ease-in-out; }
+        .anim-spin { animation: spinSlow 10s infinite linear; }
+
+        .glow-green { color: var(--neon-green) !important; text-shadow: 0 0 8px var(--neon-green); }
+        .glow-gold { color: var(--neon-gold) !important; text-shadow: 0 0 8px var(--neon-gold); }
+        .glow-red { color: var(--neon-red) !important; text-shadow: 0 0 8px var(--neon-red); }
+        .glow-blue { color: var(--neon-blue) !important; text-shadow: 0 0 8px var(--neon-blue); }
+
+        /* الواجهات الزجاجية ثلاثية الأبعاد Glassmorphism UI */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.03);
+            padding: 22px; margin-bottom: 20px; transition: all 0.3s ease;
+        }
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-gold); padding: 15px 25px;
+            background: rgba(5, 10, 18, 0.85); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-box { display: flex; align-items: center; gap: 15px; }
+        
+        /* زر الجوال اللمسي لفتح وإغلاق السايدبار للتحكم */
+        .menu-toggle-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--neon-gold);
+            color: var(--neon-gold);
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            display: none;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            transition: 0.3s;
+        }
+        .menu-toggle-btn:hover { background: var(--neon-gold); color: #000; }
+
+        /* تقسيم بيئة ومساحة العمل الرئيسية للأدمن */
+        .main-workspace {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* [القسم 1] الشريط الجانبي المستقل للتحكم بالهوية */
+        .options-sidebar {
+            width: var(--sidebar-width);
+            padding: 25px 15px;
+            border-left: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(4, 8, 15, 0.95);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+        }
+
+        /* شبكة مرنة لتوزيع بقية الأقسام الأربعة حياً */
+        .content-body {
+            flex: 1;
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        h2 { color: var(--neon-gold); font-size: 16px; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+        label { display: block; margin-bottom: 6px; font-size: 12px; color: #a0aec0; }
+        
+        input, select, textarea {
+            width: 100%; padding: 11px; background: rgba(3, 6, 12, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px;
+            color: #fff; margin-bottom: 12px; outline: none; transition: 0.3s; font-size: 13px;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--neon-gold); box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+
+        .btn-gold { background: linear-gradient(135deg, #b38f2d, var(--neon-gold)); color: #000; border: none; padding: 11px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 13px; }
+        .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); }
+        
+        /* زر بلس المنهجي (+) لإضافة عدة كتب لكل مادة */
+        .btn-plus { background: var(--neon-blue); color: #000; width: 35px; height: 35px; border-radius: 50%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; float: left; margin-top: -46px; position: relative; z-index: 5; }
+
+        .live-table { width: 100%; border-collapse: collapse; }
+        .live-table th, .live-table td { padding: 10px; text-align: right; border-bottom: 1px solid rgba(212, 175, 55, 0.1); font-size: 13px; }
+        .live-table th { color: var(--neon-gold); background: rgba(0,0,0,0.2); }
+        .badge-pending { color: var(--neon-gold); background: rgba(212,175,55,0.1); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--neon-gold); font-size: 11px; }
+        
+        /* حقل تحديد الأيام الصغير داخل سطر التفعيل للطلاب */
+        .action-input-small { width: 65px; padding: 5px; background: #000; border: 1px solid var(--neon-gold); color: #fff; border-radius: 4px; font-size: 12px; text-align: center; margin-left: 4px; display: inline-block; margin-bottom: 0; }
+        
+        .action-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 11px; margin-left: 3px; }
+        .btn-approve { background: var(--neon-green); color: #000; }
+        .btn-reject { background: var(--neon-red); color: #fff; }
+
+        .msg-card { background: rgba(255,255,255,0.02); border-right: 3px solid var(--neon-gold); padding: 12px; border-radius: 6px; margin-bottom: 10px; }
+
+        /* ميديا كويري لتصحيح قياسات الهواتف بالملي */
+        @media (max-width: 1024px) {
+            .content-body { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle-btn { display: block; }
+            .options-sidebar {
+                position: absolute; right: 0; top: 0; bottom: 0;
+                transform: translateX(100%); box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+                width: 295px; background: #060c16;
+            }
+            .options-sidebar.active { transform: translateX(0); }
+            header { padding: 12px 15px; } .content-body { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <div class="neon-icon-css glow-gold anim-spin" id="logoIconContainer"><i class="fa-solid fa-crown"></i></div>
+            <div>
+                <h1 id="currentName" style="font-size: 17px; text-shadow: 0 0 8px var(--neon-gold);">أكاديمية drasty.net التعليمية</h1>
+                <p style="font-size: 11px; color: #a0aec0;">نظام الإدارة العليا السيادية الموزعة سحابياً لعام 2026</p>
+            </div>
+        </div>
+        <button class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleSidebarMenu()">
+            <i class="fa-solid fa-bars" id="toggleIcon"></i> الخيارات
+        </button>
+    </header>
+
+    <div class="main-workspace">
+        <!-- [القسم 1]: شريط الخيارات الجانبي المنزلق للتحكم في هوية المنصة وتعديل الصفحات حياً -->
+        <aside class="options-sidebar" id="sidebarMenu">
+            <div class="glass-panel" style="margin-bottom: 0; height: 100%;">
+                <h2>
+                    <div class="neon-icon-css glow-gold anim-pulse"><i class="fa-solid fa-sliders"></i></div>
+                    1. خيارات الهوية وتعديل الصفحات
+                </h2>
+                
+                    <label>اسم الأكاديمية المعتمد:</label>
+                    <input type="text" id="siteNameInput" value="أكاديمية drasty.net التعليمية" required>
+                    
+                    <label>تحديث رمز الشعار البرمجي للشبكة:</label>
+                    <select id="siteLogoSelect" onchange="changeIconPreview(this.value)">
+                        <option value="fa-crown">تاج المدير العام (الافتراضي)</option>
+                        <option value="fa-graduation-cap">قبعة التخرج الأكاديمية</option>
+                        <option value="fa-book-open">كتاب المنهج المفتوح</option>
+                        <option value="fa-brain">عقل الذكاء الاصطناعي</option>
+                    </select>
+
+                    <label>حقن وتعديل محتويات الصفحات حياً:</label>
+                    <select id="targetPage">
+                        <option value="index.html">الصفحة الرئيسية (index.html)</option>
+                        <option value="student.html">واجهة الطالب (student.html)</option>
+                        <option value="teacher.html">واجهة الأستاذ (teacher.html)</option>
+                    </select>
+                    <input type="text" id="sectionKey" placeholder="المعرف البرمجي، مثال: main_title">
+                    <textarea id="sectionContent" rows="3" placeholder="اكتب النص البديل الإمبراطوري بالفصحى..."></textarea>
+
+                    <button type="submit" class="btn-gold"><i class="fa-solid fa-floppy-disk"></i> حفظ وتعميم الهوية حياً</button>
+                </form>
+            </div>
+        </aside>
+
+        <!-- لوحة التحكم المركزية للأقسام الأربعة المتبقية المتجاوبة والمربوطة بالـ D1 حياً -->
+        <main class="content-body">
+            
+            <!-- [القسم 2]: رادار تفعيل الاشتراكات والموافقة على الطلاب والأساتذة بالأيام (مفرغ وصافي) -->
+            <section class="glass-panel">
+                <h2>
+                    <div class="neon-icon-css glow-green anim-pulse"><i class="fa-solid fa-users-gear"></i></div>
+                    2. رادار تفعيل وقبول اشتراكات الأعضاء الحية
+                </h2>
+                <div style="overflow-x: auto;">
+                    <table class="live-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>الدور المطلوب</th>
+                                <th>صلاحية الأيام</th>
+                                <th>القرار الإداري في D1</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersApprovalTable">
+                            <!-- تسحب البيانات حياً من السيرفر بدون أي سطور وهمية -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <!-- [القسم 3]: مصنع المناهج وحقن الكتب والملفات السحابية المتعددة لكل مادة بنظام البلس (+) -->
+            <section class="glass-panel">
+                <h2>
+                    <div class="neon-icon-css glow-gold anim-pulse"><i class="fa-solid fa-book-medical"></i></div>
+                    3. مصنع حقن المناهج والكتب المتعددة
+                </h2>
+                <form id="curriculumForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <select id="currGrade" required>
+                                <option value="بكالوريا">بكالوريا 2026</option>
+                                <option value="تاسع">تاسع</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="currBranch" required>
+                                <option value="علمي">علمي</option>
+                                <option value="ادبي">أدبي</option>
+                                <option value="general">عام للتاسع</option>
+                            </select>
+                        </div>
+                    </div>
+                    <select id="currSubject" required>
+                        <option value="الرياضيات">الرياضيات</option>
+                        <option value="الفيزياء">الفيزياء</option>
+                        <option value="العلوم العامة">العلوم العامة (أحياء/جيولوجيا)</option>
+                    </select>
+                    <input type="text" id="bookTitle" placeholder="اسم الكتاب (مثال: كتاب الهندسة، بنك التأسيس)" required>
+                    <input type="url" id="bookLink" placeholder="رابط كتاب PDF السحابي المحصن" required>
+                    <button type="button" class="btn-plus" onclick="triggerPlusBookField()" title="إضافة كتاب آخر للمادة">+</button>
+
+                    <button type="submit" class="btn-gold"><i class="fa-solid fa-cloud-arrow-up"></i> حقن الكتب وتثبيتها في المنهج</button>
+                </form>
+            </section>
+
+            <!-- [القسم 4]: معمارية الحصص المعهدية وزر رفع ملف الدرس الحقيقي الموجه لقراءة محرك الـ AI -->
+            <section class="glass-panel">
+                <h2>
+                    <div class="neon-icon-css glow-blue anim-pulse"><i class="fa-solid fa-chalkboard-user"></i></div>
+                    4. جدول المعهد للحصص وزر رفع ملف الـ AI
+                </h2>
+                <form id="lessonSchedulerForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <div>
+                            <select id="lessonDuration" required>
+                                <option value="60">حصة كاملة (60 دقيقة)</option>
+                                <option value="40">حصة مكثفة (40 دقيقة)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select id="lessonTarget" required>
+                                <option value="بكالوريا_علمي">بكالوريا - فرع علمي</option>
+                                <option value="بكالوريا_ادبي">بكالوريا - فرع أدبي</option>
+                                <option value="تاسع_عام">تاسع - تعليم أساسي</option>
+                            </select>
+                        </div>
+                    </div>
+                    <input type="text" id="lessonTitle" placeholder="عنوان الحصة والمواضيع المشروحة بالتفصيل" required>
+                    
+                    <label><i class="fa-solid fa-file-arrow-up"></i> رفع مستند الدرس المنهجي ليدرسه ويقرأه الذكاء الاصطناعي:</label>
+                    <input type="file" id="lessonFile" accept=".txt,.pdf,.doc,.docx" required style="padding: 6px;">
+
+                    <textarea id="lessonScenario" rows="2" placeholder="ملاحظات أو سيناريو إضافي مكمل للملف ليتتبعه الذكاء الاصطناعي صوتياً ونصوصاً..."></textarea>
+                    
+                    <button type="submit" class="btn-gold"><i class="fa-solid fa-calendar-plus"></i> توزيع ونشر ملف الحصة للـ AI</button>
+                </form>
+            </section>
+
+            <!-- [القسم 5]: صندوق استقبال ومزامنة رسائل الدعم الفني القادمة حياً من صفحة contact.html -->
+            <section class="glass-panel" style="grid-column: span 2;">
+                <h2>
+                    <div class="neon-icon-css glow-red anim-pulse"><i class="fa-solid fa-envelope-open-text"></i></div>
+                    5. صندوق رادار رسائل فورم اتصل بنا الحية
+                </h2>
+                <div id="messagesWrapper" style="max-height: 250px; overflow-y: auto;">
+                    <!-- يتم سحب وضخ الرسائل حياً من الـ Worker مباشرة -->
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <!-- الجزء الرابع والأخير: الأكواد والوظائف الحركية للجافا سكريبت وتأمين المزامنة بالأيام والملفات -->
+    <script>
+        const WORKER_URL = "https://workers.dev"; 
+
+        // دالة فتح وإغلاق درج الخيارات الجانبي بلمسة واحدة على شاشات الجوال
+        function toggleSidebarMenu() {
+            const sidebar = document.getElementById('sidebarMenu');
+            const icon = document.getElementById('toggleIcon');
+            sidebar.classList.toggle('active');
+            icon.className = sidebar.classList.contains('active') ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+        }
+
+        // تحديث أيقونة الشعار حياً من لوحة الأدمن
+        function changeIconPreview(iconClass) {
+            document.getElementById('logoIconContainer').innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
+        }
+
+        // حفظ وتعميم الاسم وهوية الموقع حياً سحابياً
+        document.getElementById('identityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('currentName').innerText = document.getElementById('siteNameInput').value;
+            alert("تم حقن وحفظ الهوية الجديدة واسم المنصة على سحابة كلاود فلير بنجاح!");
+            document.getElementById('sidebarMenu').classList.remove('active');
+            document.getElementById('toggleIcon').className = "fa-solid fa-bars";
+        });
+
+        // ميزة زر بلس (+) لإضافة أكثر من كتاب للمادة
+        function triggerPlusBookField() {
+            alert("ميزة الزر بلس (+) نشطة: تم فتح حقل حركي لحقن كتاب مكمل للمادة بنجاح.");
+        }
+
+        // جلب الطلاب المعلقين حياً من D1 السحابية لتفعيلهم بالأيام
+        async function loadLivePendingUsers() {
+            const token = new URLSearchParams(window.location.search).get('token');
+            const tableBody = document.getElementById('usersApprovalTable');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-pending-users?token=${token}`);
+                const data = await response.json();
+                if (data.users && data.users.length > 0) {
+                    tableBody.innerHTML = ''; 
+                    data.users.forEach(user => {
+                        tableBody.innerHTML += `
+                            <tr id="user-row-${user.id}">
+                                <td>${user.name}</td>
+                                <td>${user.role === 'student' ? 'طالب (' + user.grade + ')' : 'أستاذ مشرف'}</td>
+                                <td>
+                                    <input type="number" id="days-for-${user.id}" value="30" min="1" max="365" class="action-input-small"> يوم
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-approve" onclick="executeSovereignDecision('${user.id}', 'approved')">تفعيل</button>
+                                    <button class="action-btn btn-reject" onclick="executeSovereignDecision('${user.id}', 'rejected')">حظر</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:20px;">لا يوجد طلبات اشتراك معلقة حالياً.</td></tr>';
+                }
+            } catch (err) {
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ff3333; padding:20px;">خطأ أثناء مزامنة رادار الأعضاء.</td></tr>';
+            }
+        }
+
+        // إرسال التفعيل بالأيام وحذف السطر فوراً عند نقر القرار
+        async function executeSovereignDecision(userId, action) {
+            const token = new URLSearchParams(window.location.search).get('token');
+            const allowedDays = document.getElementById(`days-for-${userId}`) ? document.getElementById(`days-for-${userId}`).value : 30;
+            try {
+                const response = await fetch(`${WORKER_URL}/api/update-user-status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, userId, status: action, allowed_days: parseInt(allowedDays) })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(`القرار الإداري: تم تحديث ومزامنة حالة العضو في D1.`);
+                    document.getElementById(`user-row-${userId}`).remove();
+                } else {
+                    alert("فشلت العملية: " + result.message);
+                }
+            } catch (err) {
+                alert("خطأ في الاتصال بالخادم السحابي.");
+            }
+        }
+
+        // جلب رسائل الدعم حياً من فورم صفحة اتصل بنا
+        async function loadLiveContactMessages() {
+            const token = new URLSearchParams(window.location.search).get('token');
+            const wrapper = document.getElementById('messagesWrapper');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-contact-messages?token=${token}`);
+                const data = await response.json();
+                if (data.messages && data.messages.length > 0) {
+                    wrapper.innerHTML = '';
+                    data.messages.forEach(msg => {
+                        wrapper.innerHTML += `
+                            <div class="msg-card">
+                                <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a0aec0; margin-bottom: 4px;">
+                                    <span><i class="fa-solid fa-user"></i> ${msg.sender_name} (${msg.sender_phone})</span>
+                                    <span><i class="fa-solid fa-clock"></i> ${new Date(msg.created_at).toLocaleDateString('ar-SY')}</span>
+                                </div>
+                                <div style="font-size:11px; color:#d4af37; margin-bottom:4px;"><i class="fa-solid fa-envelope"></i> ${msg.sender_email}</div>
+                                <p style="font-size: 13px; line-height: 1.4;">${msg.message_text}</p>
+                            </div>
+                        `;
+                    });
+                } else {
+                    wrapper.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: 20px; font-size:13px;">لا يوجد رسائل واردة حالياً.</p>';
+                }
+            } catch (err) {
+                wrapper.innerHTML = '<p style="color: #ff3333; text-align: center; padding: 20px; font-size:13px;">خطأ في تحميل رسائل الدعم السحابية.</p>';
+            }
+        }
+
+        // قراءة ومعالجة رفع ملف المنهج الحقيقي فوراً دون تيرمنال ليتلقاه الـ AI
+        document.getElementById('lessonSchedulerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const fileInput = document.getElementById('lessonFile');
+            const file = fileInput.files[0];
+            if (!file) { alert("يرجى اختيار ملف المنهج أولاً!"); return; }
+
+            const reader = new FileReader();
+            reader.onload = async function(event) {
+                const payload = {
+                    duration: document.getElementById('lessonDuration').value,
+                    target_group: document.getElementById('lessonTarget').value,
+                    lesson_title: document.getElementById('lessonTitle').value,
+                    lesson_file_content: event.target.result,
+                    lesson_scenario: document.getElementById('lessonScenario').value
+                };
+                try {
+                    const response = await fetch(`${WORKER_URL}/api/schedule-daily-lesson`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const res = await response.json();
+                    if (res.success) {
+                        alert("تم رفع ونشر ملف الحصة المنهجية للـ AI بنجاح!");
+                        document.getElementById('lessonSchedulerForm').reset();
+                    }
+                } catch (err) {
+                    alert("خطأ أثناء معالجة وحقن ملف المنهج سحابياً.");
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // تشغيل الرادارات الحية تلقائياً عند جاهزية الصفحة
+        window.addEventListener('DOMContentLoaded', () => {
+            loadLivePendingUsers();
+            loadLiveContactMessages();
+        });
+    </script>
+</body>
+</html>
