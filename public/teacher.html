@@ -1,1 +1,280 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>drasty.net - لوحة الأستاذ المشرف</title>
+    <!-- استدعاء الخطوط والأيقونات عبر سيرفرات cdnjs لضمان عملها داخل سوريا للأبد دون حجب -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --bg-dark: #050a12;
+            --bg-card: rgba(8, 16, 32, 0.7);
+            --neon-gold: #d4af37;
+            --neon-green: #00ff66;
+            --neon-blue: #00d2ff;
+            --neon-red: #ff3333;
+            --text-light: #f5f6f8;
+            --glass-border: rgba(212, 175, 55, 0.15);
+        }
 
+        /* منع التمرير الأفقي وضبط اللمس السلس للهواتف المحمولة */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: radial-gradient(circle at top, #0f233c 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        /* الأيقونات النيونية ثلاثية الأبعاد المصنوعة بالـ CSS */
+        .neon-icon-css {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid currentColor;
+            box-shadow: 0 0 10px currentColor;
+        }
+
+        /* أنيميشن وميض النبض الأحمر لحالات الطوارئ وطلبات المساعدة */
+        @keyframes emergencyPulse {
+            0% { box-shadow: 0 0 8px var(--neon-red); border-color: var(--neon-red); }
+            50% { box-shadow: 0 0 20px var(--neon-red); border-color: #ff6666; }
+            100% { box-shadow: 0 0 8px var(--neon-red); border-color: var(--neon-red); }
+        }
+        .pulse-emergency { animation: emergencyPulse 1.5s infinite ease-in-out; }
+
+        .glow-gold { color: var(--neon-gold) !important; text-shadow: 0 0 8px var(--neon-gold); }
+        .glow-green { color: var(--neon-green) !important; text-shadow: 0 0 8px var(--neon-green); }
+        .glow-red { color: var(--neon-red) !important; text-shadow: 0 0 8px var(--neon-red); }
+        .glow-blue { color: var(--neon-blue) !important; text-shadow: 0 0 8px var(--neon-blue); }
+
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.02);
+            padding: 20px; margin-bottom: 20px;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-gold); padding-bottom: 12px; margin-bottom: 20px;
+        }
+
+        /* شبكة العمل المتجاوبة لواجهة الموجه */
+        .teacher-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 20px;
+        }
+        @media (max-width: 900px) {
+            .teacher-grid { grid-template-columns: 1fr; }
+        }
+        /* تنسيقات بالونات غرف الدعم والمحادثة */
+        .chat-widget-box {
+            display: flex; flex-direction: column; height: 450px;
+            background: rgba(4, 8, 15, 0.6); border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.15); overflow: hidden;
+        }
+        .chat-messages-display { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+        .bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+        .bubble-teacher { background: rgba(0, 255, 102, 0.15); border: 1px solid var(--neon-green); align-self: flex-end; color: #fff; }
+        .bubble-student { background: rgba(212, 175, 55, 0.15); border: 1px solid var(--neon-gold); align-self: flex-start; color: #fff; }
+        
+        .chat-input-area { padding: 10px; background: rgba(0,0,0,0.4); display: flex; gap: 8px; border-top: 1px solid rgba(212,175,55,0.1); }
+        input { width: 100%; padding: 11px; background: rgba(3, 6, 12, 0.9); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 8px; color: #fff; outline: none; font-size: 13px; }
+        input:focus { border-color: var(--neon-gold); }
+        .btn-send-msg { background: var(--neon-gold); color: #000; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .live-table { width: 100%; border-collapse: collapse; }
+        .live-table th, .live-table td { padding: 10px; text-align: right; border-bottom: 1px solid rgba(212, 175, 55, 0.1); font-size: 13px; }
+        .live-table th { color: var(--neon-gold); background: rgba(0,0,0,0.2); }
+        .action-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 11px; background: var(--neon-green); color: #000; }
+    </style>
+</head>
+<body>
+
+    <!-- الهيدر وعرض هوية الأستاذ المشرف -->
+    <header class="glass-panel" style="margin-bottom: 0;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="neon-icon-css glow-green"><i class="fa-solid fa-chalkboard-user"></i></div>
+            <div>
+                <h1 style="font-size: 16px; text-shadow: 0 0 8px var(--neon-green);">لوحة الأستاذ المشرف والموجه</h1>
+                <p style="font-size: 11px; color: #a0aec0;"><i class="fa-solid fa-signal"></i> رادار الاستماع لطلبات المساعدة مصعد ومفعل</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="teacher-grid" style="margin-top: 20px;">
+        
+        <!-- [قسم رادار الطوارئ]: لمراقبة طلبات المساعدة المصعدة من الطلاب حياً (مفرغ وصافي) -->
+        <section class="glass-panel">
+            <h2 style="font-size: 14px; margin-bottom: 15px;"><i class="fa-solid fa-bell glow-red"></i> طلبات المساعدة العاجلة (تصعيد الـ AI)</h2>
+            <div style="overflow-x: auto;">
+                <table class="live-table">
+                    <thead>
+                        <tr>
+                            <th>الطالب</th>
+                            <th>المرحلة الدراسية</th>
+                            <th>الإجراء الإداري</th>
+                        </tr>
+                    </thead>
+                    <tbody id="emergencyRequestsTable">
+                        <!-- تسحب الطلبات حياً بنبض السيرفر بدون أي سطور وهمية -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- [قسم غرف الشات المشتركة]: نافذة محاكاة خدمة العملاء بين الأستاذ والطالب -->
+        <section class="glass-panel" style="padding: 15px;">
+            <h2 style="font-size: 14px; margin-bottom: 12px;" id="activeChatTitle"><i class="fa-solid fa-comments glow-blue"></i> غرفة المحادثة الفورية المغلقة</h2>
+            
+            <div class="chat-widget-box">
+                <div class="chat-messages-display" id="teacherMessagesWrapper">
+                    <p style="color: #a0aec0; text-align: center; padding: 40px; font-size: 12.5px;">الرجاء قبول أحد طلبات المساعدة المعلقة في اليمين لبدء المحادثة الفورية مع الطالب حياً...</p>
+                </div>
+
+                <div class="chat-input-area">
+                    <input type="text" id="teacherChatInputField" placeholder="اكتب ردك المنهجي للشرح للطالب فورا..." onkeypress="if(event.key === 'Enter') sendTeacherChatMessage()">
+                    <button class="btn-send-msg" onclick="sendTeacherChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </section>
+
+    </div>
+    <!-- الجزء الثالث والأخير: محركات الجافا سكريبت ورادار نبض غرف المساعدة الحية -->
+    <script>
+        const WORKER_URL = "https://workers.dev"; // النطاق الفعلي للـ Worker
+        let activeChatId = null;
+        let activeStudentName = "";
+
+        // 1. رادار نبض دوري لاستدعاء طلبات المساعدة المصعدة من الطلاب حياً كل 4 ثوانٍ
+        async function listenForEmergencyRequests() {
+            const token = new URLSearchParams(window.location.search).get('token');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-requested-chats?token=${token}`);
+                const data = await response.json();
+                const tableBody = document.getElementById('emergencyRequestsTable');
+
+                if (data.success && data.chats && data.chats.length > 0) {
+                    tableBody.innerHTML = ''; // تنظيف جدول الطلبات
+                    data.chats.forEach(chat => {
+                        tableBody.innerHTML += `
+                            <tr class="pulse-emergency" style="background: rgba(255,51,51,0.02);">
+                                <td style="font-weight:bold;">${chat.student_name}</td>
+                                <td>${chat.student_grade} (${chat.student_branch})</td>
+                                <td>
+                                    <button class="action-btn" onclick="acceptStudentSupportChat('${chat.chat_id}', '${chat.student_name}')">
+                                        <i class="fa-solid fa-compress"></i> دخول وجلسة الشات
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color:#a0aec0; padding:15px;">لا يوجد طلبات مساعدة مصعدة حالياً.</td></tr>';
+                }
+            } catch (err) {
+                console.error("خطأ أثناء مزامنة رادار طلبات الأستاذ:", err);
+            }
+        }
+
+        // 2. قبول الأستاذ لجلسة المساعدة وفتح غرفة المحادثة الفورية مباشرة
+        async function acceptStudentSupportChat(chatId, studentName) {
+            const token = new URLSearchParams(window.location.search).get('token');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/accept-support-chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, chat_id: chatId })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    activeChatId = chatId;
+                    activeStudentName = studentName;
+                    document.getElementById('activeChatTitle').innerHTML = `<i class="fa-solid fa-comments glow-green"></i> محادثة نشطة: ${studentName}`;
+                    document.getElementById('teacherMessagesWrapper').innerHTML = `<p style="color:var(--neon-green); text-align:center; font-size:12px; margin-bottom:10px;"><i class="fa-solid fa-unlock-keyhole"></i> تم فتح الغرفة حياً، اكتب الشرح للطالب بالأسفل...</p>`;
+                    
+                    // تشغيل رادار نبض جلب الرسائل المتبادلة فوراً كل 2 ثانية
+                    setInterval(loadLiveChatMessages, 2000);
+                    listenForEmergencyRequests(); // تحديث جدول الطلبات فوراً
+                }
+            } catch (err) {
+                alert("خطأ أثناء الدخول لغرفة الطالب.");
+            }
+        }
+
+        // 3. رادار جلب وضخ الرسائل الحية داخل الغرفة من الـ D1
+        async function loadLiveChatMessages() {
+            if (!activeChatId) return;
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-chat-messages?chat_id=${activeChatId}`);
+                const data = await response.json();
+
+                if (data.success && data.messages) {
+                    const wrapper = document.getElementById('teacherMessagesWrapper');
+                    // فلترة وعرض الرسائل لتجنب مشاكل التكرار في الشاشة
+                    const existingBubbles = wrapper.querySelectorAll('.bubble').length;
+                    
+                    if (data.messages.length > existingBubbles) {
+                        // إزالة رسائل الترحيب التأسيسية عند بدء تداول الشات الحقيقي
+                        if (existingBubbles === 0 || wrapper.querySelector('p')) wrapper.innerHTML = '';
+                        
+                        for (let i = existingBubbles; i < data.messages.length; i++) {
+                            const msg = data.messages[i];
+                            const bubbleClass = msg.sender_role === 'teacher' ? 'bubble-teacher' : 'bubble-student';
+                            const senderName = msg.sender_role === 'teacher' ? 'أنت' : activeStudentName;
+                            
+                            wrapper.innerHTML += `<div class="bubble ${bubbleClass}"><b>${senderName}:</b> ${msg.message_text}</div>`;
+                        }
+                        wrapper.scrollTop = wrapper.scrollHeight;
+                    }
+                }
+            } catch (err) { console.error("خطأ في جلب الرسائل."); }
+        }
+
+        // 4. إرسال رد الأستاذ المشرف وحقنه في السيرفر السحابي فوراً
+        async function sendTeacherChatMessage() {
+            const inputField = document.getElementById('teacherChatInputField');
+            const messageText = inputField.value.trim();
+            if (!messageText || !activeChatId) return;
+
+            const token = new URLSearchParams(window.location.search).get('token');
+            try {
+                await fetch(`${WORKER_URL}/api/send-chat-message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, chat_id: activeChatId, sender_role: 'teacher', message_text: messageText })
+                });
+                inputField.value = '';
+                loadLiveChatMessages(); // تحديث الشاشة فوراً
+            } catch (err) {
+                alert("فشل إرسال الرسالة، يرجى مراجعة اتصال السيرفر.");
+            }
+        }
+
+        // تشغيل الرادار النبضي فور فتح لوحة الأستاذ والتحقق الدوري
+        window.addEventListener('DOMContentLoaded', () => {
+            listenForEmergencyRequests();
+            setInterval(listenForEmergencyRequests, 4000); // النبض الآلي لرادار الطوارئ
+        });
+    </script>
+</body>
+</html>
