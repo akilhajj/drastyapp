@@ -131,3 +131,50 @@
             <div id="contactAlert" class="system-alert">تم إرسال رسالتك بنجاح حياً لـ D1! راجع لوحة الأدمن لرؤيتها.</div>
         </form>
     </div>
+    <script>
+        // النطاق السحابي الفعلي لكلاود فلير وركر الخاص بالأكاديمية
+        const WORKER_URL = "https://workers.dev"; 
+
+        document.getElementById('academyContactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const alertBox = document.getElementById('contactAlert');
+            const submitBtn = e.target.querySelector('.btn-portal');
+            
+            alertBox.style.display = "none";
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري الحقن والمزامنة الحية...`;
+
+            const payload = {
+                sender_name: document.getElementById('contactName').value,
+                sender_phone: document.getElementById('contactPhone').value,
+                sender_email: document.getElementById('contactEmail').value,
+                message_text: document.getElementById('contactMessage').value
+            };
+
+            try {
+                // إرسال البيانات فوراً لمسار استقبال رسائل الدعم الفني في السيرفر الخلفي
+                const response = await fetch(`${WORKER_URL}/api/send-contact-message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alertBox.style.display = "block";
+                    document.getElementById('academyContactForm').reset();
+                } else {
+                    alert("فشلت العملية: " + result.message);
+                }
+            } catch (err) {
+                alert("خطأ في الاتصال بالخادم، يرجى التحقق من الشبكة وإعادة المحاولة.");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-share-from-square"></i> إرسال البيانات السحابية فوراً`;
+            }
+        });
+    </script>
+</body>
+</html>
