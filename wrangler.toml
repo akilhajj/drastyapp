@@ -1,1 +1,13 @@
+name = "drasty-backend"
+main = "src/index.js"
+compatibility_date = "2026-06-20"
 
+# 1. تفعيل وحقن محرك الذكاء الاصطناعي المركزي لـ Llama-3 صوت ونص
+[ai]
+binding = "AI"
+
+# 2. ربط قاعدة البيانات السحابية D1 الفورية بالمتغير البرمجي DB
+[[d1_databases]]
+binding = "DB"
+database_name = "drasty-db-2026"
+database_id = "d0dfea7f-36c1-4e53-8802-bc6e56ffb79e"
