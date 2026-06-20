@@ -1,1 +1,257 @@
+بناءً على خطتنا الهندسية من الصفر المطلق واستراتيجية "الهاتف أولاً" (Mobile-First)، سنبدأ الآن بملء الملف الثالث في الأكاديمية وهو public/register.html.
+هذه الصفحة مخصصة لإنشاء حسابات الطلاب والأساتذة الجدد، وهي مربوطة بالـ Worker لتصب البيانات مباشرة في قاعدة بيانات D1 كحسابات معلقة (pending) بانتظار تفعيل الأدمن الكبير لها يدويّاً من لوحته السيادية بعد سداد الرسوم المحلية.
+سأقسم كود ملف public/register.html إلى 3 أجزاء برمجية صافية ومترابطة لتركيبها خلف بعضها بكل سهولة.
+إليك الجزء الأول (1 من 3)، ويحتوي على إعدادات الـ head وتهيئة التصميم البصري الزجاجي ثلاثي الأبعاد الموحد المتناسق تماماً مع شاشات الجوال:
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>drasty.net - بوابة إنشاء الحسابات الحية</title>
+    <!-- استدعاء الأيقونات والخطوط المعتمدة عبر سيرفرات cdnjs لضمان عملها داخل سوريا دون حجب -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --bg-dark: #050a12;
+            --bg-card: rgba(8, 16, 32, 0.7);
+            --neon-gold: #d4af37;
+            --neon-green: #00ff66;
+            --neon-blue: #00d2ff;
+            --neon-red: #ff3333;
+            --text-light: #f5f6f8;
+            --glass-border: rgba(212, 175, 55, 0.15);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: radial-gradient(circle at top, #0f233c 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            overflow-x: hidden;
+        }
+
+        /* حاوية التسجيل الزجاجية المجسمة 3D Glassmorphism المطابقة لشاشات الجوال */
+        .register-card {
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-card);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.03);
+            padding: 30px 20px;
+            text-align: center;
+            transition: border-color 0.3s ease;
+        }
+
+        .brand-section i {
+            font-size: 46px;
+            color: var(--neon-gold);
+            text-shadow: 0 0 15px var(--neon-gold);
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        h1 { font-size: 19px; color: #fff; margin-bottom: 5px; text-shadow: 0 0 8px rgba(255,255,255,0.1); }
+        .brand-desc { color: #a0aec0; font-size: 12px; margin-bottom: 22px; }
+
+قم بنسخ هذا الكود ولصقه في تبويب ملف public/register.html المفتوح لديك في الفيجوال ستوديو ويب، ثم اكتب لي كلمة "التالي" لأرسل لك الجزء الثاني المتضمن حقول الاختيارات والفروع المتكاملة!
+
+        /* هندسة وتنسيق الحقول والنماذج المخصصة للأجهزة الذكية اللمسية */
+        form { text-align: right; }
+        label { display: block; margin-bottom: 6px; font-size: 12px; color: #a0aec0; }
+        
+        .input-group { position: relative; margin-bottom: 14px; }
+        .input-group i { position: absolute; right: 14px; top: 14px; color: var(--neon-gold); font-size: 14px; }
+        
+        input, select {
+            width: 100%; padding: 12px 42px 12px 12px; background: rgba(3, 6, 12, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px;
+            color: #fff; outline: none; transition: 0.3s; font-size: 14px;
+        }
+        input:focus, select:focus { border-color: var(--neon-gold); box-shadow: 0 0 12px rgba(212, 175, 55, 0.25); }
+
+        /* تعديلات القوائم المنسدلة داخل الهواتف */
+        select option { background: #060c15; color: #fff; }
+
+        .btn-portal {
+            background: linear-gradient(135deg, #b38f2d, var(--neon-gold));
+            color: #000; border: none; padding: 13px; border-radius: 10px;
+            cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s;
+            font-size: 14px; display: flex; justify-content: center; align-items: center; gap: 8px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+        .btn-portal:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
+
+        .system-alert {
+            margin-top: 15px; padding: 10px; border-radius: 8px; font-size: 13px;
+            display: none; text-align: center; font-weight: bold;
+        }
+        .alert-error { background: rgba(255,51,51,0.1); border: 1px solid var(--neon-red); color: var(--neon-red); text-shadow: 0 0 5px var(--neon-red); }
+        .alert-success { background: rgba(0,255,102,0.1); border: 1px solid var(--neon-green); color: var(--neon-green); text-shadow: 0 0 5px var(--neon-green); }
+
+        .footer-links { margin-top: 20px; font-size: 12px; color: #a0aec0; text-align: center; }
+        .footer-links a { color: var(--neon-gold); text-decoration: none; font-weight: bold; margin: 0 4px; }
+        .footer-links a:hover { text-shadow: 0 0 5px var(--neon-gold); }
+    </style>
+</head>
+<body>
+
+    <div class="register-card">
+        <div class="brand-section">
+            <i class="fa-solid fa-user-plus"></i>
+            <h1>إنشاء حساب جديد</h1>
+            <div class="brand-desc">انضم إلى مجتمع الأكاديمية السحابي لعام 2026 حياً</div>
+        </div>
+
+        <form id="portalRegisterForm">
+            <label>الاسم الثلاثي الكامل:</label>
+            <div class="input-group">
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" id="regName" placeholder="مثال: أحمد محمد العلي" required>
+            </div>
+
+            <label>رقم المحمول (الواتساب النشط في سوريا):</label>
+            <div class="input-group">
+                <i class="fa-solid fa-phone"></i>
+                <input type="tel" id="regPhone" placeholder="مثال: 0933XXXXXX" required>
+            </div>
+
+            <label>البريد الإلكتروني المقترح للتسجيل:</label>
+            <div class="input-group">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" id="regEmail" placeholder="student@drasty.net" required>
+            </div>
+
+            <label>كلمة المرور الخاصة بحسابك:</label>
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="regPassword" placeholder="••••••••" required>
+            </div>
+
+            <label>نوع الحساب المطلوب:</label>
+            <div class="input-group">
+                <i class="fa-solid fa-user-graduate"></i>
+                <select id="regRole" onchange="handleRoleChange(this.value)" required>
+                    <option value="student">طالب (تاسع أو بكالوريا)</option>
+                    <option value="teacher">أستاذ موظف مشرف</option>
+                </select>
+            </div>
+
+            <!-- حقول الاختيارات التعليمية للطلاب وتختفي تلقائياً للأستاذ -->
+            <div id="studentFieldsContainer">
+                <label>المرحلة التعليمية:</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-school"></i>
+                    <select id="regGrade">
+                        <option value="بكالوريا">ثالث ثانوي (بكالوريا 2026)</option>
+                        <option value="تاسع">شهادة التعليم الأساسي (تاسع)</option>
+                    </select>
+                </div>
+
+                <label>الفرع الدراسي:</label>
+                <div class="input-group">
+                    <i class="fa-solid fa-book"></i>
+                    <select id="regBranch">
+                        <option value="علمي">الفرع العلمي</option>
+                        <option value="ادبي">الفرع الأدبي</option>
+                        <option value="general">عام (لطلاب التاسع)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-portal">
+                <i class="fa-solid fa-cloud-arrow-up"></i> إرسال طلب الاشتراك السحابي
+            </button>
+            
+            <div id="registerAlert" class="system-alert"></div>
+        </form>
+
+        <div class="footer-links">
+            لديك حساب بالفعل؟ <a href="index.html">سجل الدخول فوراً</a>
+        </div>
+    </div>
+    <script>
+        const WORKER_URL = "https://workers.dev"; // النطاق الفعلي لكلاود فلير وركر الخاص بالأكاديمية
+
+        // دالة ذكية لإخفاء وإظهار حقول الفرع والصف حسب نوع الحساب المختار لتوفير مساحة شاشات الجوال
+        function handleRoleChange(selectedRole) {
+            const studentFields = document.getElementById('studentFieldsContainer');
+            if (selectedRole === 'teacher') {
+                studentFields.style.display = 'none';
+            } else {
+                studentFields.style.display = 'block';
+            }
+        }
+
+        document.getElementById('portalRegisterForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const alertBox = document.getElementById('registerAlert');
+            const submitBtn = e.target.querySelector('.btn-portal');
+            
+            alertBox.style.display = "none";
+            alertBox.className = "system-alert";
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري إرسال الطلب السحابي...`;
+
+            // جمع البيانات وبناؤها ديناميكياً حسب الدور المختار
+            const role = document.getElementById('regRole').value;
+            const payload = {
+                id: "user-" + Math.random().toString(36).substr(2, 9) + "-" + Date.now(), // توليد معرف فريد وآمن سحابياً
+                name: document.getElementById('regName').value,
+                phone: document.getElementById('regPhone').value,
+                email: document.getElementById('regEmail').value,
+                password: document.getElementById('regPassword').value,
+                role: role,
+                grade: role === 'student' ? document.getElementById('regGrade').value : 'none',
+                branch: role === 'student' ? document.getElementById('regBranch').value : 'none'
+            };
+
+            try {
+                // الاتصال المباشر بمسار إنشاء واستقبال الحسابات الجديدة في الـ Worker الخلفي
+                const response = await fetch(`${WORKER_URL}/api/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    alertBox.style.display = "block";
+                    alertBox.classList.add('alert-success');
+                    alertBox.innerText = "تم إرسال طلب اشتراكك بنجاح! حسابك الآن قيد المراجعة المعلقة، يرجى التواصل مع الإدارة لتفعيله بالأيام.";
+                    document.getElementById('portalRegisterForm').reset();
+                    
+                    // تحويل المستخدم تلقائياً لصفحة الدخول بعد 3 ثوانٍ من النجاح
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 3500);
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (err) {
+                alertBox.style.display = "block";
+                alertBox.classList.add('alert-error');
+                alertBox.innerText = err.message || "خطأ أثناء محاولة الاتصال بالخادم، يرجى إعادة المحاولة.";
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> إرسال طلب الاشتراك السحابي`;
+            }
+        });
+    </script>
+</body>
+</html>
