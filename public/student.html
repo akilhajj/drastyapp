@@ -1,1 +1,451 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>drasty.net - قاعة الطالب الذكية</title>
+    <!-- استدعاء الخطوط والأيقونات عبر سيرفرات cdnjs لضمان عملها داخل سوريا للأبد دون حجب -->
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <style>
+        :root {
+            --bg-dark: #050a12;
+            --bg-card: rgba(8, 16, 32, 0.7);
+            --neon-gold: #d4af37;
+            --neon-green: #00ff66;
+            --neon-blue: #00d2ff;
+            --neon-red: #ff3333;
+            --text-light: #f5f6f8;
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --sidebar-width: 290px;
+        }
 
+        /* حماية وضبط الشاشات اللمسية للهواتف المحمولة ومنع التمرير العشوائي */
+        * { 
+            box-sizing: border-box; 
+            margin: 0; padding: 0; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: radial-gradient(circle at top, #0f233c 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* الأيقونات الهندسية النيونية ثلاثية الأبعاد المصنوعة برمجياً بالـ CSS */
+        .neon-icon-css {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            font-size: 16px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid currentColor;
+            box-shadow: 0 0 10px currentColor;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.04); opacity: 1; box-shadow: 0 0 15px currentColor; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+        .anim-pulse { animation: pulseGlow 2.5s infinite ease-in-out; }
+
+        .glow-gold { color: var(--neon-gold) !important; text-shadow: 0 0 8px var(--neon-gold); }
+        .glow-green { color: var(--neon-green) !important; text-shadow: 0 0 8px var(--neon-green); }
+        .glow-blue { color: var(--neon-blue) !important; text-shadow: 0 0 8px var(--neon-blue); }
+        .glow-red { color: var(--neon-red) !important; text-shadow: 0 0 8px var(--neon-red); }
+
+        /* الألواح والبطاقات الزجاجية المجسمة 3D Glassmorphism UI */
+        .glass-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.02);
+            padding: 20px; margin-bottom: 20px; transition: all 0.3s ease;
+        }
+
+        /* ترويسة الصفحة الثابتة والمتجاوبة */
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 2px solid var(--neon-gold); padding: 12px 20px;
+            background: rgba(5, 10, 18, 0.85); backdrop-filter: blur(10px);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .student-info-box { display: flex; align-items: center; gap: 12px; }
+
+        .menu-btn {
+            background: rgba(212, 175, 55, 0.1); border: 1px solid var(--neon-gold); color: var(--neon-gold);
+            padding: 8px 14px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: bold;
+            display: none; box-shadow: 0 0 8px rgba(212, 175, 55, 0.15); transition: 0.3s;
+        }
+        /* توزيع المساحة الكلية والمظهر الشامل لواجهة الطالب */
+        .workspace-container {
+            display: flex;
+            flex: 1;
+            position: relative;
+        }
+
+        /* حقيبة كتب التأسيس والمواد الماضي المؤرشفة (Sidebar) */
+        .archive-sidebar {
+            width: var(--sidebar-width);
+            padding: 20px 15px;
+            border-left: 1px solid rgba(212, 175, 55, 0.15);
+            background: rgba(4, 8, 15, 0.95);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 99;
+        }
+
+        /* المحتوى المنهجي المركزي للحصص اليومية */
+        .main-lesson-area {
+            flex: 1;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 20px;
+        }
+
+        /* تصميم السبورة التفاعلية الذكية المتحركة */
+        .dynamic-blackboard {
+            min-height: 250px;
+            background: #04080f;
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 15px;
+            line-height: 1.7;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* تأثير الأنيميشن التفاعلي لخطوات الشرح والرموز الرياضية */
+        .step-visible {
+            animation: fadeInStep 0.6s ease-out forwards;
+            border-right: 3px solid var(--neon-gold);
+            padding-right: 10px;
+            margin-bottom: 12px;
+        }
+
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateX(15px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* أزرار التشغيل والإنطاق الفصيح والتحكم بالحصة */
+        .control-btn {
+            background: linear-gradient(135deg, #00d2ff, #007acc);
+            color: #000; border: none; padding: 12px 20px;
+            border-radius: 10px; cursor: pointer; font-weight: bold;
+            font-size: 13px; display: inline-flex; align-items: center; gap: 8px;
+            transition: 0.3s; margin-top: 15px;
+        }
+        .control-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 210, 255, 0.4); }
+
+        /* صندوق نظام المساعدة والفرز الذكي الطبقي (الـ AI وغرف المحادثة) */
+        .chat-widget-box {
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+            background: rgba(4, 8, 15, 0.6);
+            border-radius: 12px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            overflow: hidden;
+        }
+
+        .chat-messages-display {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* بالونات الرسائل متباينة الألوان للأمان البصري */
+        .bubble { max-width: 85%; padding: 10px 14px; border-radius: 12px; font-size: 13.5px; line-height: 1.5; }
+        .bubble-ai { background: rgba(0, 210, 255, 0.1); border: 1px solid var(--neon-blue); align-self: flex-start; color: #fff; }
+        .bubble-teacher { background: rgba(0, 255, 102, 0.1); border: 1px solid var(--neon-green); align-self: flex-start; color: #fff; }
+        .bubble-student { background: rgba(212, 175, 55, 0.15); border: 1px solid var(--neon-gold); align-self: flex-end; color: #fff; }
+
+        .chat-input-area { padding: 10px; background: rgba(0,0,0,0.4); display: flex; gap: 8px; border-top: 1px solid rgba(212,175,55,0.1); }
+        .chat-input-area input { margin-bottom: 0; padding: 10px; }
+        
+        .btn-send-msg { background: var(--neon-gold); color: #000; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-escalate { background: var(--neon-red); color: #fff; border: none; width: 100%; padding: 10px; font-weight: bold; font-size: 12px; cursor: pointer; display: none; }
+
+        /* ميديا كويري هندسية لتصحيح التجاوب على الهواتف */
+        @media (max-width: 1024px) {
+            .main-lesson-area { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .menu-btn { display: block; }
+            .archive-sidebar {
+                position: absolute; right: 0; top: 0; bottom: 0;
+                transform: translateX(100%); box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+                width: 275px; background: #060c16;
+            }
+            .archive-sidebar.active { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- ترويسة قاعة الطالب وعرض حالة الحصة اليومية -->
+    <header>
+        <div class="student-info-box">
+            <div class="neon-icon-css glow-blue anim-pulse"><i class="fa-solid fa-user-astronaut"></i></div>
+            <div>
+                <h1 id="welcomeStudentName" style="font-size: 16px; text-shadow: 0 0 8px var(--neon-blue);">قاعة الدرس اليومي التفاعلي</h1>
+                <p id="subscriptionStatus" style="font-size: 11px; color: var(--neon-green);"><i class="fa-solid fa-circle-check"></i> الحساب نشط ومتصل بالسيرفر المركزي</p>
+            </div>
+        </div>
+        <!-- زر الجوال لفتح وإغلاق حقيبة المواد والأرشيف التراكمي -->
+        <button class="menu-btn" id="menuToggleBtn" onclick="toggleArchiveSidebar()">
+            <i class="fa-solid fa-book-bookmark" id="toggleIcon"></i> حقيبة المواد
+        </button>
+    </header>
+
+    <div class="workspace-container">
+        
+        <!-- [الطبقة الجانبية] حقيبة كتب التأسيس والمواد والحصص الماضية المؤرشفة للمراجعة -->
+        <aside class="archive-sidebar" id="archiveSidebar">
+            <div class="glass-panel" style="margin-bottom: 0; height: 100%; overflow-y: auto;">
+                <h2 style="font-size: 14px; margin-bottom: 15px;"><i class="fa-solid fa-folder-open glow-gold"></i> حقيبة الأرشيف والمناهج</h2>
+                
+                <label>اختر المادة التعليمية:</label>
+                <select id="studentSubjectSelect" onchange="loadSubjectArchive(this.value)">
+                    <option value="الرياضيات">الرياضيات</option>
+                    <option value="الفيزياء">الفيزياء</option>
+                    <option value="العلوم العامة">العلوم العامة</option>
+                </select>
+
+                <div id="archiveLessonsContainer" style="margin-top: 15px;">
+                    <p style="color: #a0aec0; font-size: 12px; text-align: center;">جاري مزامنة كتب التأسيس وحصص الكتاب المرفوعة...</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- مساحة العرض الرئيسية للحصة الـ 24 ساعة التدريجية المتجددة تلقائياً -->
+        <main class="main-lesson-area">
+            
+            <!-- لوحة السبورة الذكية المتحركة ومحرك الإنطاق الصوتي السريع -->
+            <section class="glass-panel" style="display: flex; flex-direction: column;">
+                <h2 id="lessonTitleHeader"><i class="fa-solid fa-chalkboard glow-blue"></i> جاري سحب حصة اليوم المجدولة سحابياً...</h2>
+                
+                <div class="dynamic-blackboard" id="lessonBlackboard">
+                    <div class="step-visible" style="color: #a0aec0; text-align: center; border-right: none; margin-top: 50px;">
+                        <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 24px; color: var(--neon-blue);"></i>
+                        <p style="margin-top: 10px;">بانتظار قفل وحفظ ملف الحصة اليومية لتعمل السبورة الحركية والإنطاق الفصيح تلقائياً...</p>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="control-btn" id="audioActionBtn" onclick="triggerAudioExplanation()"><i class="fa-solid fa-volume-high"></i> استمع للشرح المسموع الفصيح</button>
+                    <button class="control-btn" style="background: linear-gradient(135deg, #b38f2d, var(--neon-gold));" id="nextStepBtn" onclick="renderNextLessonStep()"><i class="fa-solid fa-forward-step"></i> الفقرة التالية التدريجية</button>
+                </div>
+            </section>
+
+            <!-- صندوق نظام المساعدة والفرز الذكي الطبقي (الـ AI أولاً ثم تصعيد الأستاذ) -->
+            <section class="glass-panel" style="padding: 15px;">
+                <h2 style="font-size: 14px; margin-bottom: 12px;"><i class="fa-solid fa-headset glow-green"></i> غرف المساعدة الفورية الذكية</h2>
+                
+                <div class="chat-widget-box">
+                    <!-- واجهة عرض الرسائل الحية للـ AI أو الشات البشري مع الأستاذ -->
+                    <div class="chat-messages-display" id="chatMessagesWrapper">
+                        <div class="bubble bubble-ai">
+                            مرحباً بك يا صديقي في أكاديمية دراستي! أنا <b>مساعدك الذكي AI</b>. لقد قرأت مستند الحصة ومستعد تماماً لمناقشتك وفك أي مسألة أو قانون يستعصي عليك الآن (بـ 0 ثانية انتظار). اكتب سؤالك بالأسفل!
+                        </div>
+                    </div>
+
+                    <!-- زر التصعيد العاجل للأستاذ المشرف ويظهر عند حاجة الطالب وعجز الـ AI -->
+                    <button class="btn-escalate" id="escalateToTeacherBtn" onclick="escalateChatToHumanTeacher()">
+                        <i class="fa-solid fa-triangle-exclamation"></i> عجز الذكاء الاصطناعي؟ اطلب تدخل الأستاذ المشرف حياً
+                    </button>
+
+                    <div class="chat-input-area">
+                        <input type="text" id="chatStudentInputField" placeholder="اكتب سؤالك العلمي باللغة العربية الفصيحة..." onkeypress="if(event.key === 'Enter') sendStudentChatMessage()">
+                        <button class="btn-send-msg" onclick="sendStudentChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+    <script>
+        const WORKER_URL = "https://workers.dev"; 
+        let currentLessonSteps = [];
+        let currentStepIndex = 0;
+        let activeChatMode = "ai"; 
+        let activeChatId = null;
+
+        function toggleArchiveSidebar() {
+            const sidebar = document.getElementById('archiveSidebar');
+            const icon = document.getElementById('toggleIcon');
+            sidebar.classList.toggle('active');
+            icon.className = sidebar.classList.contains('active') ? "fa-solid fa-xmark" : "fa-solid fa-book-bookmark";
+        }
+
+        async function loadDailyActiveLesson() {
+            const token = new URLSearchParams(window.location.search).get('token');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-active-lesson?token=${token}`);
+                const data = await response.json();
+                if (data.success && data.lesson) {
+                    document.getElementById('lessonTitleHeader').innerHTML = `<i class="fa-solid fa-chalkboard glow-blue"></i> ${data.lesson.lesson_title}`;
+                    currentLessonSteps = data.lesson.lesson_file_content.split('\n').filter(line => line.trim() !== '');
+                    currentStepIndex = 0;
+                    document.getElementById('lessonBlackboard').innerHTML = '';
+                    renderNextLessonStep(); 
+                } else {
+                    document.getElementById('lessonBlackboard').innerHTML = `<div style="text-align:center; padding:40px; color:#a0aec0;">لا توجد حصة مجدولة لليوم حالياً، يمكنك مراجعة الأرشيف.</div>`;
+                }
+            } catch (err) {
+                console.error("خطأ أثناء سحب الحصة اليومية:", err);
+            }
+        }
+
+        function renderNextLessonStep() {
+            if (currentStepIndex < currentLessonSteps.length) {
+                const blackboard = document.getElementById('lessonBlackboard');
+                if (currentStepIndex === 0) blackboard.innerHTML = ''; 
+                const stepText = currentLessonSteps[currentStepIndex];
+                const stepElement = document.createElement('div');
+                stepElement.className = 'step-visible';
+                stepElement.innerText = stepText;
+                blackboard.appendChild(stepElement);
+                blackboard.scrollTop = blackboard.scrollHeight;
+                speakTextNotification(stepText);
+                currentStepIndex++;
+            } else {
+                alert("تهانينا! لقد أتممت دراسة كافة فقرات حصة اليوم بنجاح.");
+            }
+        }
+
+        function speakTextNotification(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); 
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'ar-SA'; 
+                utterance.rate = 0.9; 
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function triggerAudioExplanation() {
+            if (currentStepIndex > 0) {
+                speakTextNotification(currentLessonSteps[currentStepIndex - 1]);
+            }
+        }
+
+        async function sendStudentChatMessage() {
+            const inputField = document.getElementById('chatStudentInputField');
+            const messageText = inputField.value.trim();
+            if (!messageText) return;
+            const wrapper = document.getElementById('chatMessagesWrapper');
+            wrapper.innerHTML += `<div class="bubble bubble-student">${messageText}</div>`;
+            inputField.value = '';
+            wrapper.scrollTop = wrapper.scrollHeight;
+
+            if (activeChatMode === "ai") {
+                try {
+                    const response = await fetch(`${WORKER_URL}/api/ai-chat-assist`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            message: messageText,
+                            lesson_context: currentLessonSteps.slice(0, currentStepIndex).join('\n') 
+                        })
+                    });
+                    const data = await response.json();
+                    wrapper.innerHTML += `<div class="bubble bubble-ai">${data.reply}</div>`;
+                    document.getElementById('escalateToTeacherBtn').style.display = 'block';
+                } catch (err) {
+                    wrapper.innerHTML += `<div class="bubble bubble-ai" style="color:var(--neon-red)">عذراً، واجه محرك الـ AI بطء مؤقت بالشبكة.</div>`;
+                }
+            } else {
+                const token = new URLSearchParams(window.location.search).get('token');
+                await fetch(`${WORKER_URL}/api/send-chat-message`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, chat_id: activeChatId, sender_role: 'student', message_text: messageText })
+                });
+            }
+            wrapper.scrollTop = wrapper.scrollHeight;
+        }
+
+        async function escalateChatToHumanTeacher() {
+            const token = new URLSearchParams(window.location.search).get('token');
+            const wrapper = document.getElementById('chatMessagesWrapper');
+            document.getElementById('escalateToTeacherBtn').style.display = 'none';
+            wrapper.innerHTML += `<div class="bubble bubble-ai" style="border-color:var(--neon-red); color:var(--neon-red);">جاري تصعيد المسألة وإرسال إشعار طوارئ أحمر للأستاذ المشرف... يرجى الانتظار ثوانٍ ليتم فتح غرفة المحادثة المباشرة...</div>`;
+            try {
+                const response = await fetch(`${WORKER_URL}/api/create-support-chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    activeChatMode = "teacher";
+                    activeChatId = data.chat_id;
+                    setInterval(listenForTeacherMessages, 3000);
+                }
+            } catch (err) {
+                alert("خطأ أثناء استدعاء غرف المشرفين.");
+            }
+        }
+
+        async function listenForTeacherMessages() {
+            if (activeChatMode !== "teacher" || !activeChatId) return;
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-chat-messages?chat_id=${activeChatId}`);
+                const data = await response.json();
+                if (data.success && data.messages) {
+                    const wrapper = document.getElementById('chatMessagesWrapper');
+                    const teacherMsgs = data.messages.filter(m => m.sender_role === 'teacher');
+                    const existingTeacherBubbles = wrapper.querySelectorAll('.bubble-teacher').length;
+                    if (teacherMsgs.length > existingTeacherBubbles) {
+                        for (let i = existingTeacherBubbles; i < teacherMsgs.length; i++) {
+                            wrapper.innerHTML += `<div class="bubble bubble-teacher"><b>الأستاذ المشرف:</b> ${teacherMsgs[i].message_text}</div>`;
+                        }
+                        wrapper.scrollTop = wrapper.scrollHeight;
+                    }
+                }
+            } catch (err) { console.error("خطأ في رادار نبض الرسائل."); }
+        }
+
+        async function loadSubjectArchive(subject) {
+            const container = document.getElementById('archiveLessonsContainer');
+            try {
+                const response = await fetch(`${WORKER_URL}/api/get-subject-archive?subject=${encodeURIComponent(subject)}`);
+                const data = await response.json();
+                if (data.success && data.lessons && data.lessons.length > 0) {
+                    container.innerHTML = '';
+                    data.lessons.forEach(les => {
+                        container.innerHTML += `
+                            <div style="padding:10px; background:rgba(255,255,255,0.02); border-bottom:1px solid rgba(212,175,55,0.1); border-radius:6px; margin-bottom:8px; cursor:pointer;" onclick="loadArchivedLessonToBlackboard(${les.id})">
+                                <div style="font-size:12px; font-weight:bold; color:var(--neon-gold);"><i class="fa-solid fa-graduation-cap"></i> ${les.lesson_title}</div>
+                                <div style="font-size:10px; color:#a0aec0; margin-top:2px;"><i class="fa-solid fa-clock"></i> حصة ${les.duration} دقيقة</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    container.innerHTML = '<p style="color:#a0aec0; font-size:11px; text-align:center;">لا يوجد حصص مؤرشفة مسبقاً لهذه المادة.</p>';
+                }
+            } catch (err) { container.innerHTML = '<p style="color:var(--neon-red); font-size:11px; text-align:center;">خطأ في مزامنة الأرشيف.</p>'; }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadDailyActiveLesson();
+            loadSubjectArchive(document.getElementById('studentSubjectSelect').value);
+        });
+    </script>
+</body>
+</html>
