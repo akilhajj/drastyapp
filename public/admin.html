@@ -371,35 +371,33 @@
                 const data = await response.json();
                       if (data.success && data.users && data.users.length > 0) {
             tableBody.innerHTML = ''; 
-            data.users.forEach(user => {
-                const gradeText = user.grade !== 'none' ? user.grade : '';
-                const branchText = user.branch && user.branch !== 'none' ? ` - ${user.branch}` : '';
-                const fullRole = user.role === 'student' ? `طالب (${gradeText}${branchText})` : 'أستاذ مشرف';
-                const daysCount = user.allowed_days || 30;
+                            if (data.success && data.users && data.users.length > 0) {
+                    tableBody.innerHTML = ''; 
+                    data.users.forEach(user => {
+                        const gradeText = user.grade !== 'none' ? user.grade : '';
+                        const branchText = user.branch && user.branch !== 'none' ? ` - ${user.branch}` : '';
+                        const fullRole = user.role === 'student' ? `طالب (${gradeText}${branchText})` : 'أستاذ مشرف';
+                        const daysCount = user.allowed_days || 30;
 
-                tableBody.innerHTML += `
-                    <tr id="user-row-${user.id}">
-                        <td style="font-weight: bold; color: #fff;">${user.name}</td>
-                        <td style="color: #a0aec0;">${fullRole}</td>
-                        <td>
-                            <input type="number" id="days-for-${user.id}" value="${daysCount}" min="1" max="365" class="action-input-small"> يوم
-                        </td>
-                        <td>
-                            <button class="action-btn btn-approve" onclick="executeSovereignDecision('${user.id}', 'approved')">تفعيل</button>
-                            <button class="action-btn btn-reject" onclick="executeSovereignDecision('${user.id}', 'rejected')">حظر</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        } else {
-            tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:20px;">لا يوجد طلبات اشتراك معلقة حالياً في D1.</td></tr>';
-        }
-
+                        tableBody.innerHTML += `
+                            <tr id="user-row-${user.id}">
+                                <td style="font-weight: bold; color: #fff;">${user.name}</td>
+                                <td style="color: #a0aec0;">${fullRole}</td>
+                                <td>
+                                    <input type="number" id="days-for-${user.id}" value="${daysCount}" min="1" max="365" class="action-input-small"> يوم
+                                </td>
+                                <td>
+                                    <button class="action-btn btn-approve" onclick="executeSovereignDecision('${user.id}', 'approved')">تفعيل</button>
+                                    <button class="action-btn btn-reject" onclick="executeSovereignDecision('${user.id}', 'rejected')">حظر</button>
+                                </td>
+                            </tr>
+                        `;
+                    });
                 } else {
-                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:20px;">لا يوجد طلبات اشتراك معلقة حالياً.</td></tr>';
+                    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#a0aec0; padding:20px;">لا يوجد طلبات اشتراك معلقة حالياً في D1.</td></tr>';
                 }
             } catch (err) {
-                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ff3333; padding:20px;">خطأ أثناء مزامنة رادار الأعضاء.</td></tr>';
+                tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ff3333; padding:20px;">خطأ أثناء مزامنة وقراءة رادار الأعضاء السحابي.</td></tr>';
             }
         }
 
