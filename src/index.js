@@ -79,8 +79,8 @@ export default {
         // ========================================================
         if (url.pathname === "/api/get-pending-users" && request.method === "GET") {
             try {
-                const { results } = await env.DB.prepare("SELECT id, name, role, grade FROM users WHERE status = 'pending' ORDER BY id DESC").all();
-                return new Response(JSON.stringify({ success: true, users: results }), { headers: corsHeaders });
+                                const { results } = await env.DB.prepare("SELECT id, name, role, grade, branch, allowed_days FROM users WHERE status = 'pending' ORDER BY id DESC").all();
+                   return new Response(JSON.stringify({ success: true, users: results }), { headers: corsHeaders });
             } catch (err) {
                 return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500, headers: corsHeaders });
             }
