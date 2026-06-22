@@ -40,9 +40,9 @@ export default {
                 let redirectUrl = "index.html";
                 
                 // هندسة التوجيه الفوري والفرز الصارم حسب رتبة المستخدم لمنع تداخل اللوحات
-                if (user.role === 'admin') redirectUrl = `admin.html?token=${generatedToken}`;
-                else if (user.role === 'teacher') redirectUrl = `teacher.html?token=${generatedToken}`;
-                else if (user.role === 'student') redirectUrl = `student.html?token=${generatedToken}`;
+                if (user.role === 'admin') redirectUrl = `public/admin.html?token=${generatedToken}`;
+                else if (user.role === 'teacher') redirectUrl = `public/teacher.html?token=${generatedToken}`;
+                else if (user.role === 'student') redirectUrl = `public/student.html?token=${generatedToken}`;
 
                 return new Response(JSON.stringify({
                     success: true,
