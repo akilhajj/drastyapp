@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>drasty.net - لوحة الإدارة العليا السيادية المتقدمة</title>
-    <!-- الأيقونات والخطوط المعتمدة عبر سيرفرات cdnjs لضمان عملها داخل سوريا للأبد دون حجب -->
+    <!-- استدعاء الأيقونات والخطوط عبر سيرفرات cdnjs لضمان تخطي الحجب داخل سوريا للابد -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         :root {
@@ -35,7 +35,7 @@
             overflow-x: hidden;
         }
 
-        /* الأيقونات النيونية الهندسية البرمجية ثلاثية الأبعاد بنظام الـ CSS */
+        /* هندسة الأيقونات النيونية ثلاثية الأبعاد البرمجية بالـ CSS */
         .neon-icon-css {
             display: inline-flex;
             align-items: center;
@@ -67,7 +67,7 @@
         .glow-red { color: var(--neon-red) !important; text-shadow: 0 0 8px var(--neon-red); }
         .glow-blue { color: var(--neon-blue) !important; text-shadow: 0 0 8px var(--neon-blue); }
 
-        /* الواجهات الزجاجية ثلاثية الأبعاد Glassmorphism UI */
+        /* الواجهات الزجاجية المجسمة الفاخرة Glassmorphism UI */
         .glass-panel {
             background: var(--bg-card);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -75,6 +75,7 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.03);
             padding: 22px; margin-bottom: 20px; transition: all 0.3s ease;
         }
+
         header {
             display: flex; justify-content: space-between; align-items: center;
             border-bottom: 2px solid var(--neon-gold); padding: 15px 25px;
@@ -83,7 +84,6 @@
         }
         .logo-box { display: flex; align-items: center; gap: 15px; }
         
-        /* زر الجوال اللمسي لفتح وإغلاق السايدبار للتحكم */
         .menu-toggle-btn {
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid var(--neon-gold);
@@ -99,14 +99,8 @@
         }
         .menu-toggle-btn:hover { background: var(--neon-gold); color: #000; }
 
-        /* تقسيم بيئة ومساحة العمل الرئيسية للأدمن */
-        .main-workspace {
-            display: flex;
-            flex: 1;
-            position: relative;
-        }
-
-        /* [القسم 1] الشريط الجانبي المستقل للتحكم بالهوية */
+        .main-workspace { display: flex; flex: 1; position: relative; }
+        /* الشريط الجانبي المستقل للتحكم بالهوية الرادارية والمناهج */
         .options-sidebar {
             width: var(--sidebar-width);
             padding: 25px 15px;
@@ -116,7 +110,7 @@
             z-index: 99;
         }
 
-        /* شبكة مرنة لتوزيع بقية الأقسام الأربعة حياً */
+        /* شبكة مرنة لتوزيع الأقسام الأربعة التنفيذية حياً */
         .content-body {
             flex: 1;
             padding: 25px;
@@ -138,15 +132,14 @@
         .btn-gold { background: linear-gradient(135deg, #b38f2d, var(--neon-gold)); color: #000; border: none; padding: 11px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 13px; }
         .btn-gold:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); }
         
-        /* زر بلس المنهجي (+) لإضافة عدة كتب لكل مادة */
+        /* زر بلس المنهجي الفعال لحقن عدة كتب ومصادر للمادة المعهدية */
         .btn-plus { background: var(--neon-blue); color: #000; width: 35px; height: 35px; border-radius: 50%; border: none; font-size: 18px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; float: left; margin-top: -46px; position: relative; z-index: 5; }
 
         .live-table { width: 100%; border-collapse: collapse; }
         .live-table th, .live-table td { padding: 10px; text-align: right; border-bottom: 1px solid rgba(212, 175, 55, 0.1); font-size: 13px; }
         .live-table th { color: var(--neon-gold); background: rgba(0,0,0,0.2); }
-        .badge-pending { color: var(--neon-gold); background: rgba(212,175,55,0.1); padding: 3px 6px; border-radius: 4px; border: 1px solid var(--neon-gold); font-size: 11px; }
         
-        /* حقل تحديد الأيام الصغير داخل سطر التفعيل للطلاب */
+        /* حقل الأيام مخصص الحوسبة واللمس الصغير داخل السطور */
         .action-input-small { width: 65px; padding: 5px; background: #000; border: 1px solid var(--neon-gold); color: #fff; border-radius: 4px; font-size: 12px; text-align: center; margin-left: 4px; display: inline-block; margin-bottom: 0; }
         
         .action-btn { padding: 4px 8px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; font-size: 11px; margin-left: 3px; }
@@ -155,17 +148,11 @@
 
         .msg-card { background: rgba(255,255,255,0.02); border-right: 3px solid var(--neon-gold); padding: 12px; border-radius: 6px; margin-bottom: 10px; }
 
-        /* ميديا كويري لتصحيح قياسات الهواتف بالملي */
-        @media (max-width: 1024px) {
-            .content-body { grid-template-columns: 1fr; }
-        }
+        /* ميديا كويري هندسية لتصحيح وصيانة شاشات الجوال */
+        @media (max-width: 1024px) { .content-body { grid-template-columns: 1fr; } }
         @media (max-width: 768px) {
             .menu-toggle-btn { display: block; }
-            .options-sidebar {
-                position: absolute; right: 0; top: 0; bottom: 0;
-                transform: translateX(100%); box-shadow: -10px 0 30px rgba(0,0,0,0.8);
-                width: 295px; background: #060c16;
-            }
+            .options-sidebar { position: absolute; right: 0; top: 0; bottom: 0; transform: translateX(100%); box-shadow: -10px 0 30px rgba(0,0,0,0.8); width: 295px; background: #060c16; }
             .options-sidebar.active { transform: translateX(0); }
             header { padding: 12px 15px; } .content-body { padding: 15px; }
         }
@@ -190,10 +177,7 @@
         <!-- [القسم 1]: شريط الخيارات الجانبي المنزلق للتحكم في هوية المنصة وتعديل الصفحات حياً -->
         <aside class="options-sidebar" id="sidebarMenu">
             <div class="glass-panel" style="margin-bottom: 0; height: 100%;">
-                <h2>
-                    <div class="neon-icon-css glow-gold anim-pulse"><i class="fa-solid fa-sliders"></i></div>
-                    1. خيارات الهوية وتعديل الصفحات
-                </h2>
+                <h2><div class="neon-icon-css glow-gold anim-pulse"><i class="fa-solid fa-sliders"></i></div> 1. خيارات الهوية وتعديل الصفحات</h2>
                 
                     <label>اسم الأكاديمية المعتمد:</label>
                     <input type="text" id="siteNameInput" value="أكاديمية drasty.net التعليمية" required>
@@ -220,9 +204,7 @@
             </div>
         </aside>
 
-        <!-- لوحة التحكم المركزية للأقسام الأربعة المتبقية المتجاوبة والمربوطة بالـ D1 حياً -->
         <main class="content-body">
-            
             <!-- [القسم 2]: رادار تفعيل الاشتراكات والموافقة على الطلاب والأساتذة بالأيام (مفرغ وصافي) -->
             <section class="glass-panel">
                 <h2>
@@ -245,6 +227,7 @@
                     </table>
                 </div>
             </section>
+
             <!-- [القسم 3]: مصنع المناهج وحقن الكتب والملفات السحابية المتعددة لكل مادة بنظام البلس (+) -->
             <section class="glass-panel">
                 <h2>
@@ -267,16 +250,16 @@
                             </select>
                         </div>
                     </div>
-                  <select id="currSubject" required>
-    <option value="الرياضيات">الرياضيات</option>
-    <option value="الفيزياء">الفيزياء</option>
-    <option value="الكيمياء">الكيمياء</option>
-    <option value="العلوم العامة">العلوم العامة (أحياء/جيولوجيا)</option>
-    <option value="اللغة العربية">اللغة العربية</option>
-    <option value="اللغة الإنجليزية">اللغة الإنجليزية</option>
-    <option value="التربية الوطنية">التربية الوطنية</option>
-    <option value="الفلسفة">الفلسفة والعلوم الإنسانية</option>
-</select>
+                    <select id="currSubject" required>
+                        <option value="الرياضيات">الرياضيات</option>
+                        <option value="الفيزياء">الفيزياء</option>
+                        <option value="الكيمياء">الكيمياء</option>
+                        <option value="العلوم العامة">العلوم العامة (أحياء/جيولوجيا)</option>
+                        <option value="اللغة العربية">اللغة العربية</option>
+                        <option value="اللغة الإنجليزية">اللغة الإنجليزية</option>
+                        <option value="التربية الوطنية">التربية الوطنية</option>
+                        <option value="الفلسفة">الفلسفة والعلوم الإنسانية</option>
+                    </select>
                     <input type="text" id="bookTitle" placeholder="اسم الكتاب (مثال: كتاب الهندسة، بنك التأسيس)" required>
                     <input type="url" id="bookLink" placeholder="رابط كتاب PDF السحابي المحصن" required>
                     <button type="button" class="btn-plus" onclick="triggerPlusBookField()" title="إضافة كتاب آخر للمادة">+</button>
@@ -310,7 +293,7 @@
                     <input type="text" id="lessonTitle" placeholder="عنوان الحصة والمواضيع المشروحة بالتفصيل" required>
                     
                     <label><i class="fa-solid fa-file-arrow-up"></i> رفع مستند الدرس المنهجي ليدرسه ويقرأه الذكاء الاصطناعي:</label>
-                    <input type="file" id="lessonFile" accept=".txt,.pdf,.doc,.docx" required style="padding: 6px;">
+                    <input type="file" id="lessonFile" accept=".txt,.pdf" required style="padding: 6px;">
 
                     <textarea id="lessonScenario" rows="2" placeholder="ملاحظات أو سيناريو إضافي مكمل للملف ليتتبعه الذكاء الاصطناعي صوتياً ونصوصاً..."></textarea>
                     
@@ -331,11 +314,12 @@
 
         </main>
     </div>
-    <!-- الجزء الرابع والأخير: الأكواد والوظائف الحركية للجافا سكريبت وتأمين المزامنة بالأيام والملفات -->
+    <!-- الجزء الرابع والأخير: محركات الجافا سكريبت الاحترافية لتأمين المزامنة الذكية وتصفير الأخطاء -->
     <script>
+        // رابط سيرفر الـ Cloudflare Worker الفعلي والخاص بك والمربوط بالـ D1 والـ AI
         const WORKER_URL = "https://workers.dev"; 
 
-        // دالة فتح وإغلاق درج الخيارات الجانبي بلمسة واحدة على شاشات الجوال
+        // دالة فتح وإغلاق درج الخيارات الجانبي بلمسة لمسية مريحة على شاشات الجوال
         function toggleSidebarMenu() {
             const sidebar = document.getElementById('sidebarMenu');
             const icon = document.getElementById('toggleIcon');
@@ -343,12 +327,12 @@
             icon.className = sidebar.classList.contains('active') ? "fa-solid fa-xmark" : "fa-solid fa-bars";
         }
 
-        // تحديث أيقونة الشعار حياً من لوحة الأدمن
+        // تحديث وعرض رمز الشعار البرمجي حياً في الهيدر الملكي عند تغييره من خيارات الهوية
         function changeIconPreview(iconClass) {
             document.getElementById('logoIconContainer').innerHTML = `<i class="fa-solid ${iconClass}"></i>`;
         }
 
-        // حفظ وتعميم الاسم وهوية الموقع حياً سحابياً
+        // معالجة فورم حقن وحفظ الهوية وتعميم اسم الموقع الجديد حياً
         document.getElementById('identityForm').addEventListener('submit', function(e) {
             e.preventDefault();
             document.getElementById('currentName').innerText = document.getElementById('siteNameInput').value;
@@ -357,13 +341,13 @@
             document.getElementById('toggleIcon').className = "fa-solid fa-bars";
         });
 
-        // ميزة زر بلس (+) لإضافة أكثر من كتاب للمادة
+        // تشغيل ميزة الزر بلس (+) في مصنع المناهج لإضافة أكثر من كتاب ومصدر للمادة التعليمية
         function triggerPlusBookField() {
             alert("ميزة الزر بلس (+) نشطة: تم فتح حقل حركي لحقن كتاب مكمل للمادة بنجاح.");
         }
 
-        // جلب الطلاب المعلقين حياً من D1 السحابية لتفعيلهم بالأيام
-                async function loadLivePendingUsers() {
+        // رادار جلب الطلاب والأساتذة المعلقين حياً وبثهم في الجدول مع تعقيم البيانات ومنع الـ undefined
+        async function loadLivePendingUsers() {
             const token = new URLSearchParams(window.location.search).get('token');
             const tableBody = document.getElementById('usersApprovalTable');
             try {
@@ -400,8 +384,7 @@
             }
         }
 
-
-        // إرسال التفعيل بالأيام وحذف السطر فوراً عند نقر القرار
+        // دالة إرسال القرار الإداري السيادي (تفعيل أو حظر العضو) ومزامنته فوراً في قاعدة بيانات D1 السحابية
         async function executeSovereignDecision(userId, action) {
             const token = new URLSearchParams(window.location.search).get('token');
             const allowedDays = document.getElementById(`days-for-${userId}`) ? document.getElementById(`days-for-${userId}`).value : 30;
@@ -413,24 +396,25 @@
                 });
                 const result = await response.json();
                 if (result.success) {
-                    alert(`القرار الإداري: تم تحديث ومزامنة حالة العضو في D1.`);
+                    alert(`القرار الإداري: تم تحديث ومزامنة حالة العضو في الـ D1 بنجاح.`);
                     document.getElementById(`user-row-${userId}`).remove();
+                    loadLivePendingUsers(); // إعادة تدوير الرادار للتأكد من حالة السطور
                 } else {
                     alert("فشلت العملية: " + result.message);
                 }
             } catch (err) {
-                alert("خطأ في الاتصال بالخادم السحابي.");
+                alert("خطأ في الاتصال بالخادم السحابي وإرسال القرار.");
             }
         }
 
-        // جلب رسائل الدعم حياً من فورم صفحة اتصل بنا
+        // جلب وضخ رسائل الدعم الفني الواردة حياً من صفحة اتصل بنا إلى رادار صندوق الوارد في القسم الخامس
         async function loadLiveContactMessages() {
             const token = new URLSearchParams(window.location.search).get('token');
             const wrapper = document.getElementById('messagesWrapper');
             try {
                 const response = await fetch(`${WORKER_URL}/api/get-contact-messages?token=${token}`);
                 const data = await response.json();
-                if (data.messages && data.messages.length > 0) {
+                if (data.success && data.messages && data.messages.length > 0) {
                     wrapper.innerHTML = '';
                     data.messages.forEach(msg => {
                         wrapper.innerHTML += `
@@ -445,19 +429,19 @@
                         `;
                     });
                 } else {
-                    wrapper.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: 20px; font-size:13px;">لا يوجد رسائل واردة حالياً.</p>';
+                    wrapper.innerHTML = '<p style="color: #a0aec0; text-align: center; padding: 20px; font-size:13px;">لا يوجد رسائل واردة حالياً في صندوق الدعم.</p>';
                 }
             } catch (err) {
-                wrapper.innerHTML = '<p style="color: #ff3333; text-align: center; padding: 20px; font-size:13px;">خطأ في تحميل رسائل الدعم السحابية.</p>';
+                wrapper.innerHTML = '<p style="color: #ff3333; text-align: center; padding: 20px; font-size:13px;">خطأ في تحميل ومزامنة رسائل الدعم السحابية.</p>';
             }
         }
 
-        // قراءة ومعالجة رفع ملف المنهج الحقيقي فوراً دون تيرمنال ليتلقاه الـ AI
+        // قراءة ومعالجة رفع مستندات المناهج النصية حياً وتحويلها سحابياً ليتلقاها محرك الـ AI بـ 0 ثانية انتظار
         document.getElementById('lessonSchedulerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const fileInput = document.getElementById('lessonFile');
             const file = fileInput.files[0];
-            if (!file) { alert("يرجى اختيار ملف المنهج أولاً!"); return; }
+            if (!file) { alert("يرجى اختيار ملف المنهج المخصص أولاً!"); return; }
 
             const reader = new FileReader();
             reader.onload = async function(event) {
@@ -476,7 +460,7 @@
                     });
                     const res = await response.json();
                     if (res.success) {
-                        alert("تم رفع ونشر ملف الحصة المنهجية للـ AI بنجاح!");
+                        alert("تم رفع ونشر ملف الحصة المنهجية للـ AI بنجاح وجاهز لاستجواب الطلاب!");
                         document.getElementById('lessonSchedulerForm').reset();
                     }
                 } catch (err) {
@@ -486,7 +470,7 @@
             reader.readAsText(file);
         });
 
-        // تشغيل الرادارات الحية تلقائياً عند جاهزية الصفحة
+        // تشغيل كافة الرادارات والنبض السحابي عند تحميل وجاهزية لوحة الأدمن كاملة
         window.addEventListener('DOMContentLoaded', () => {
             loadLivePendingUsers();
             loadLiveContactMessages();
