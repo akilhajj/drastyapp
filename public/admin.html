@@ -363,15 +363,14 @@
         }
 
         // جلب الطلاب المعلقين حياً من D1 السحابية لتفعيلهم بالأيام
-        async function loadLivePendingUsers() {
+                async function loadLivePendingUsers() {
             const token = new URLSearchParams(window.location.search).get('token');
             const tableBody = document.getElementById('usersApprovalTable');
             try {
                 const response = await fetch(`${WORKER_URL}/api/get-pending-users?token=${token}`);
                 const data = await response.json();
-                      if (data.success && data.users && data.users.length > 0) {
-            tableBody.innerHTML = ''; 
-                            if (data.success && data.users && data.users.length > 0) {
+                
+                if (data.success && data.users && data.users.length > 0) {
                     tableBody.innerHTML = ''; 
                     data.users.forEach(user => {
                         const gradeText = user.grade !== 'none' ? user.grade : '';
@@ -400,6 +399,7 @@
                 tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#ff3333; padding:20px;">خطأ أثناء مزامنة وقراءة رادار الأعضاء السحابي.</td></tr>';
             }
         }
+
 
         // إرسال التفعيل بالأيام وحذف السطر فوراً عند نقر القرار
         async function executeSovereignDecision(userId, action) {
